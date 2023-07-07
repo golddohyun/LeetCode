@@ -14,3 +14,21 @@ class Solution:
                 left += 1
             max_len = max(max_len, right - left + 1)
         return max_len
+
+
+
+# Time Exceeded Error : O(N^2) method
+class Solution:
+    def find_helper(sp_t, k, spl_by) : 
+        ml = 0
+        for s in range(k+1):
+            result = []
+            for i in range(len(sp_t)-s):
+                temp_str = spl_by.join(sp_t[i:i+s+1])
+                result.append(temp_str)
+            ml = max(ml, max([len(i) for i in result], default=0))
+        return ml
+    def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+        ml_f = find_helper(a.split('F'), k, 'T')
+        ml_t = find_helper(a.split('T'), k, 'F')
+        return max(ml_f, ml_t)
