@@ -1,36 +1,46 @@
 #include <string>
 #include <iostream>
-#include <memory.h>
+#include <vector>
 using namespace std;
 
 class Solution {
-public:
+public: 
     string longestPalindrome(string s) {
-        if (s.empty()) return "";
+        int n = s.size();
+        if (n == 0) return "";
 
-        bool dp[1001][1001];
-        memset(dp, false, sizeof(dp));
+        vector<vector<bool>> dp(n, vector<bool>(n, false));
+        int start = 0;
+        int maxLength = 1; 
 
-        string answer = "";
-
-        for (int i = 0; i < s.size(); i++) {
+        // length 1 palindromes
+        for (int i = 0; i < n; i++) {
             dp[i][i] = true;
-            if (answer.empty()) answer = s.substr(i, 1);
-            if (i == s.size() - 1) break;
+        }
+
+        // length two palindrome 
+        for (int i = 0; i < n - 1; i++) {
             if (s[i] == s[i + 1]) {
                 dp[i][i + 1] = true;
-                if (answer.length() < 2) answer = s.substr(i, 2);
+                start = i;
+                maxLength = 2;
             }
         }
 
-        for (int i = 2; i < s.size(); i++)
-            for (int j = 0; j + i < s.size(); j++)
-                if (s[j] == s[j + i] && dp[j + 1][j + i - 1]) {
-                    dp[j][j + i] = true;
-                    if (answer.length() < i + 1) {
-                        answer = s.substr(j, i + 1);
+        // palindrome with more than length=3 (diff=2)
+        for (int len = 3; len <= n; len++) {
+            for (int i = 0; i < n - len + 1; i++) {
+                int j = i + len - 1; // Ending index of the current substring
+                if (s[i] == s[j] && dp[i + 1][j - 1]) {
+                    dp[i][j] = true;
+                    if (len > maxLength) {
+                        start = i;
+                        maxLength = len;
                     }
                 }
-        return answer;
+            }
+        }
+
+        return s.substr(start, maxLength);
     }
 };
