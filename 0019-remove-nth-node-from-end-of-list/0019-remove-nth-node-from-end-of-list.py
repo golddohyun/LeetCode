@@ -1,24 +1,37 @@
-class Solution:
-    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
-        reversed_head = self.reverse_ll(head)
-        prev = None
-        curr = reversed_head
+class Solution(object):
+    def getsize(self, head) :
+        size = 0
+        curnode = head
+        while curnode != None :
+            size += 1
+            curnode = curnode.next
+        return size  # Return the computed size
 
-        for _ in range(n - 1):
-            prev = curr
-            curr = curr.next
-        if prev != None:
-            prev.next = curr.next
+    def removeNthFromEnd(self, head, n):
+        """
+        :type head: ListNode
+        :type n: int
+        :rtype: ListNode
+        """
+        if head is None or n <= 0:  # Handle edge case
+            return head
+
+        size = self.getsize(head)
+        if n > size:  # If n is greater than list size, return head
+            return head
+        if n == size:  # If n is equal to list size, remove first node
+            return head.next
+
+        prev, target = None, head
+        idx = size - n
+        while idx > 0 :
+            idx -= 1
+            prev = target
+            target = target.next
+        
+        if prev is None:  # If removing the first node
+            head = target.next
         else:
-            reversed_head = curr.next
-        return self.reverse_ll(reversed_head)
+            prev.next = target.next
 
-    def reverse_ll(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        curr = copy.deepcopy(head)
-        prev = None
-        while curr:
-            tmp = curr.next
-            curr.next = prev
-            prev = curr
-            curr = tmp
-        return prev
+        return head
