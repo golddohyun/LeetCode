@@ -5,7 +5,7 @@ class Solution(object):
         while curnode != None :
             size += 1
             curnode = curnode.next
-        return size  # Return the computed size
+        return size
 
     def removeNthFromEnd(self, head, n):
         """
@@ -13,25 +13,12 @@ class Solution(object):
         :type n: int
         :rtype: ListNode
         """
-        if head is None or n <= 0:  # Handle edge case
-            return head
+        prev, cur, length = None, head, self.getsize(head)
+        if head is None : return head
+        if length == n : return head.next
 
-        size = self.getsize(head)
-        if n > size:  # If n is greater than list size, return head
-            return head
-        if n == size:  # If n is equal to list size, remove first node
-            return head.next
+        for _ in range(length-n) :
+            prev, cur = cur, cur.next
 
-        prev, target = None, head
-        idx = size - n
-        while idx > 0 :
-            idx -= 1
-            prev = target
-            target = target.next
-        
-        if prev is None:  # If removing the first node
-            head = target.next
-        else:
-            prev.next = target.next
-
+        prev.next = cur.next
         return head
