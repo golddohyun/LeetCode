@@ -9,18 +9,13 @@ class Solution(object):
         :type head: ListNode
         :rtype: ListNode
         """
-        if not head or head.next is None : return head
-        cur = head
-        head = head.next
-        while cur and cur.next:
-            adj = cur.next
-            cur.next = adj.next
-            adj.next = cur
-
-            # initialize
-            tmp = cur.next
-            if tmp and tmp.next :
-                cur.next = tmp.next
-            cur = tmp
-        return head
+        if not head : return head
+        dummy = ListNode(0, next=head)
+        prev, cur, next = dummy, head, head.next
+        while cur and cur.next : 
+            prev.next, cur.next = next, next.next
+            next.next = cur
+            if cur and cur.next :
+                prev, cur, next = cur, cur.next, cur.next.next
+        return dummy.next
 
