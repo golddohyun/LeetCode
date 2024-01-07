@@ -6,8 +6,8 @@ public:
         vector<int> result;
         // get adjacent list and indegree list
         for(auto& i : prerequisites){
-            adj[i[0]].push_back(i[1]);
-            deg[i[1]]++;
+            adj[i[1]].push_back(i[0]);
+            deg[i[0]]++;
         }
         queue<int> Q;
         for (int i =0; i < numCourses; i++){
@@ -28,7 +28,6 @@ public:
                 if (--deg[y] == 0) Q.push(y);
             }
         }
-        reverse(result.begin(), result.end());
         return result;
     }
 };
