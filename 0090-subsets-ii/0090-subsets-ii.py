@@ -1,6 +1,6 @@
 class Solution:
     def backtrack_comb(self, nums, idx, k, used, arr, result):
-        if len(arr)==k and arr not in arr:
+        if len(arr)==k and arr not in result:
             result.append(arr)
         for i in range(idx+1, len(nums)):
             if used[i]==False:
