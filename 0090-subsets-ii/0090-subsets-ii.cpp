@@ -17,7 +17,7 @@ public:
         return true;
     }
 
-    vector<vector<int>> backtrack_comb(vector<int> &nums, int idx, int k, vector<bool> &used, vector<int> &arr, vector<vector<int>> &result){
+    vector<vector<int>> backtrack_comb(vector<int> &nums, int idx, int k, vector<bool> &used, vector<int> arr, vector<vector<int>> &result){
         if (arr.size() == k) {
             if (isUnique(arr, result)) {
                 result.push_back(arr);
@@ -43,8 +43,7 @@ public:
 
         for (int k = 0; k <= nums.size(); ++k) {
             tempResult.clear();
-            vector<int> arr;
-            backtrack_comb(nums, 0, k, used, arr, tempResult);
+            backtrack_comb(nums, 0, k, used, {}, tempResult);
             for (auto& elem : tempResult) {
                 sort(elem.begin(), elem.end());
                 if (find(leng.begin(), leng.end(), elem) == leng.end()) {
