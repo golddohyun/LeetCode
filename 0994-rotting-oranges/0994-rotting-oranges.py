@@ -1,40 +1,44 @@
-from collections import deque
-
-class Solution:
-    def orangesRotting(self, grid: List[List[int]]) -> int:
-        N, M = len(grid), len(grid[0])
-        if N == 0 : 
-            return -1
-
-        visited = [[0]*M for _ in range(N)]
-        d = [[1, 0], [-1, 0], [0, 1], [0, -1]]
-
-        # Initialize the queue with rotten oranges
-        queue = deque()
-        for y in range(N):
-            for x in range(M):
-                if grid[y][x] == 2:
-                    queue.append((y, x))
-                    visited[y][x] = 1
-                    grid[y][x] = 0
-
-        while queue:
-            y, x = queue.popleft()
-            for dy, dx in d:
-                ny, nx = y + dy, x + dx
-                if 0 <= ny < N and 0 <= nx < M and visited[ny][nx] == 0 and grid[ny][nx] != 0:
-                    queue.append((ny, nx))
-                    visited[ny][nx] = visited[y][x] + 1
-                    grid[ny][nx] = 0
-
-        # Check for any remaining fresh oranges
-        for row in grid:
-            if 1 in row:
-                return -1
-            
-        if max(map(max, visited)) == 0:
-            return 0
+class Solution(object):
+    def orangesRotting(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
         
+        if len(grid) == 0 : return -1
+        
+        queue, maxval = deque(), 0
+        rows, cols = len(grid), len(grid[0])
+        directions = [(0,1),(0,-1),(1,0),(-1,0)]
 
-        # Return time taken (max distance - 1)
-        return max(map(max, visited)) - 1
+
+        ## initialize : put grids that's rotten
+        zero_flag = False
+        for r in range(rows) :
+            for c in range(cols) :
+                if grid[r][c] == 2 :
+                    queue.append([r, c])
+                    zero_flag = True
+                elif grid[r][c] == 1 :
+                    zero_flag = True
+        
+        while queue :
+            curx, cury = queue.popleft()
+            for dr, dc in directions :
+                nx, ny = curx + dr, cury + dc
+                if (nx < 0 or ny < 0 or nx >= rows or ny >= cols) : continue
+                if grid[nx][ny] != 1 : continue # already rotten or is empty
+                queue.append([nx, ny])
+                grid[nx][ny] += grid[curx][cury]
+            if maxval < grid[curx][cury] :
+                maxval = grid[curx][cury]
+
+        # filtering
+        if not zero_flag : return 0
+        if maxval == 0 : return -1
+        for items in grid :
+            if 1 in items :
+                return -1
+        return maxval-2
+
+
