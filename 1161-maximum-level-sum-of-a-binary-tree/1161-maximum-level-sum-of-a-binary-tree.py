@@ -4,20 +4,21 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+from collections import deque
 class Solution:
     def maxLevelSum(self, root):
-        sums = []
+        sum_dct, maxlevel = dict(), 0
         queue = deque([root])
         while queue :
-            size = len(queue)
-            sum = 0
-            for _ in range(size) :
-                v = queue.popleft()
-                sum += v.val
-                if v.left : queue.append(v.left)
-                if v.right : queue.append(v.right)
-            sums.append(sum)
-        
-        for idx in range(len(sums)) :
-            if sums[idx] == max(sums) :
-                return idx+1
+            tmp, q_size = 0, len(queue)
+            for _ in range(q_size) :
+                curnode = queue.popleft()
+                if curnode.left : queue.append(curnode.left)
+                if curnode.right : queue.append(curnode.right)
+                tmp += curnode.val
+            sum_dct[maxlevel] = tmp
+            maxlevel+=1
+        # print(sum_dct)
+        for lev, num in sum_dct.items() :
+            if num == max(sum_dct.values()) :
+                return lev +1
