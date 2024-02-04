@@ -1,23 +1,34 @@
 class Solution:
     def maximumDetonation(self, B):
-        n, ans, G = len(B), 0, defaultdict(list)
-        
-        for i in range(n):
-            for j in range(n):
-                if i == j: continue
-                if B[i][2]**2 >= (B[i][0] - B[j][0])**2 + (B[i][1] - B[j][1])**2:
-                    G[i] += [j]
-        
-        
-        def dfs(node, visited):
-            for child in G[node]:
-                if child not in visited:
-                    visited.add(child)
-                    dfs(child, visited)
+        from collections import defaultdict, deque
 
-        for i in range(n):
-            visited = set([i])
-            dfs(i, visited)
-            ans = max(ans, len(visited))
-                          
-        return ans
+        if len(B) == 1 : return 1
+        adj_list, lenb = dict(), len(B)
+
+        # Get adjacenty list for the bombs
+        for i in range(lenb) :
+            for j in range(lenb) :
+                if i == j : continue
+                if i not in adj_list :
+                    adj_list[i] = []
+                dist_range = B[i][2]
+                if ((B[i][0]-B[j][0])**2 + (B[i][1]-B[j][1])**2) <= (dist_range**2) :
+                    adj_list[i].append(j)
+
+
+        max_cnt , queue = 0, deque()
+        for b in adj_list : 
+            cnt, used = 0, [0]*lenb
+            queue.append(b)
+            used[b] = 1
+            while queue :
+                cur = queue.popleft()
+                cnt+=1
+                for nei in adj_list[cur] :
+                    if not used[nei]:
+                        queue.append(nei)
+                        used[nei] = 1
+
+            if max_cnt < cnt :
+                max_cnt = cnt
+        return max_cnt
