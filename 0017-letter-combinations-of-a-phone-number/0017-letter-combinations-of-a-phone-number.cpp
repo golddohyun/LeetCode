@@ -1,11 +1,5 @@
-#include <iostream>
-#include <map>
-#include <string>
-#include <vector>
-using namespace std;
-
-class Solution {
-public:
+class Solution{
+    public:
     map<char, string> createAlphabetDictionary() {
         map<char, string> alphabetDict;
         char currentChar = 'a';
@@ -25,19 +19,20 @@ public:
             result.push_back(current);
             return;
         }
-        char digit = digits[depth];
-        for (char ch : alphaDict[digit]) {
-            current += ch;
-            backtrackPerm(digits, depth + 1, current, result, alphaDict);
+        char curdigit = digits[depth];
+        for (auto s : alphaDict[curdigit]){
+            current +=s;
+            backtrackPerm(digits, depth+1, current, result, alphaDict);
             current.pop_back();
         }
     }
+
 
     vector<string> letterCombinations(string digits) {
         if (digits.empty()) return {};
         map<char, string> alphaDict = createAlphabetDictionary();
         vector<string> result;
-        string current;
+        string current = "";
         backtrackPerm(digits, 0, current, result, alphaDict);
         return result;
     }
