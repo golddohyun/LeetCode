@@ -1,21 +1,12 @@
-class Solution(object):
-    def combinationSum(self, candidates, target):
-        """
-        :type candidates: List[int]
-        :type target: int
-        :rtype: List[List[int]]
-        """
-  
-        def backtrack_comb(arr, result, target) :
-            if target == 0 and sorted(arr[:]) not in result :
-                result.append(sorted(arr[:]))
-                return
-            for i in range(len(candidates)) :
-                if candidates[i] <= target :
-                    arr.append(candidates[i])
-                    backtrack_comb(arr, result, target-candidates[i])
-                    arr.pop()
-
-        result = []
-        backtrack_comb([], result, target)
-        return list(result)
+class Solution:
+    def combinationSum(self, can: List[int], target: int) -> List[List[int]]:
+        res=[]
+        def backtracking(curr: List[int],i:int):
+            s=sum(curr)
+            if s==target:
+                res.append(curr)
+            elif s<target:
+                for j in range(i,len(can)):
+                    backtracking(curr+[can[j]],j)
+        backtracking([],0)
+        return res
