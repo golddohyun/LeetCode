@@ -5,15 +5,14 @@ class Solution(object):
         :type target: int
         :rtype: List[List[int]]
         """
-  
-        def backtrack_comb(arr, result, target) :
-            if target == 0 and sorted(arr[:]) not in result :
-                result.append(sorted(arr[:]))
+        def backtrack_comb(arr, i, target) :
+            if target == 0 :
+                result.append(arr[:])
                 return
-            for i in range(len(candidates)) :
-                if candidates[i] <= target :
-                    backtrack_comb(arr+[candidates[i]], result, target-candidates[i])
+            for idx in range(i, len(candidates)) :
+                if candidates[idx] <= target :
+                    backtrack_comb(arr+[candidates[idx]], idx, target-candidates[idx])
 
         result = []
-        backtrack_comb([], result, target)
+        backtrack_comb([], 0, target)
         return list(result)
