@@ -1,6 +1,6 @@
 class Solution {
 public:
-    void backtrack_comb(int start, const int& k, int target, vector<int> arr, vector<vector<int>>& res){
+    void backtrack_comb(int start, const int& k, int target, vector<int>& arr, vector<vector<int>>& res){
         if (arr.size() == k && target == 0) {
             res.push_back(arr);
             return;
@@ -12,7 +12,6 @@ public:
                 arr.pop_back();
             }
         }
-
     }
     vector<vector<int>> combinationSum3(int k, int n) {
         vector<vector<int>> res;
