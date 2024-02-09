@@ -1,58 +1,28 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <unordered_set>
-#include <algorithm>
-using namespace std;
-
-
 class Solution {
 public:
-    bool isUnique(const vector<int>& arr, const vector<vector<int>>& result) {
-        for (const auto& res : result) {
-            if (arr == res) {
-                return false;
-            }
+    void backtrack_comb(int start, int mx_len, const vector<int>& nums, vector<vector<int>>& res, vector<int>& arr) {
+        if (arr.size() == mx_len) {
+            res.push_back(arr);
+            return;
         }
-        return true;
+        int prev = -1;
+        for (int idx=start; idx < nums.size(); idx++){
+            if (idx > start && prev == nums[idx]) continue;
+            prev = nums[idx];
+            arr.push_back(prev);
+            backtrack_comb(idx+1, mx_len, nums, res, arr);
+            arr.pop_back();
+        }
     }
-
-    vector<vector<int>> backtrack_comb(vector<int> &nums, int idx, int k, vector<bool> &used, vector<int> arr, vector<vector<int>> &result){
-        if (arr.size() == k) {
-            if (isUnique(arr, result)) {
-                result.push_back(arr);
-                }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums){
+        vector<vector<int>> res;
+        vector<int> arr;
+        sort(nums.begin(), nums.end());
+        for (int k=0; k < nums.size()+1; k++){
+            backtrack_comb(0, k, nums, res, arr);
         }
-        for (int i = idx; i < nums.size(); ++i) {
-            if (used[i] == false) {
-                used[i] = true;
-                arr.push_back(nums[i]);
-                backtrack_comb(nums, i + 1, k, used, arr, result);
-                arr.pop_back(); // Remove the last element to backtrack
-                used[i] = false;
-            }
-        }
-        return result;
-
-    }
-
-    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        vector<vector<int>> leng;
-        vector<bool> used(nums.size(), false);
-        vector<vector<int>> tempResult;
-
-        for (int k = 0; k <= nums.size(); ++k) {
-            tempResult.clear();
-            backtrack_comb(nums, 0, k, used, {}, tempResult);
-            for (auto& elem : tempResult) {
-                sort(elem.begin(), elem.end());
-                if (find(leng.begin(), leng.end(), elem) == leng.end()) {
-                    leng.push_back(elem);
-                }
-            }
-        }
-        return leng;
-
-        
+        return res;
     }
 };
+
+
