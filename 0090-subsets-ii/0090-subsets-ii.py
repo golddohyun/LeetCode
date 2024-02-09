@@ -3,7 +3,6 @@ class Solution:
         def backtrack_comb(start, arr, mx_len) :
             if len(arr) == mx_len :
                 result.append(arr)
-                print(result)
                 return
             prev = -1
             for idx in range(start, len(nums)) :
