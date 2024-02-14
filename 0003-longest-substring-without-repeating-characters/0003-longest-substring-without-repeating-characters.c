@@ -3,13 +3,6 @@
 #include <stdbool.h> 
 #include <stdlib.h>
 
-bool isSubstring(char ch, char* str) {
-    for (int i = 0; str[i]; i++) {
-        if (str[i] == ch) return true;
-    }
-    return false;
-}
-
 int lengthOfLongestSubstring(char* s) {
     int len_s = strlen(s);
     int curmax = 0;
