@@ -10,4 +10,4 @@ class Solution(object):
             if w_key not in str_dict :
                 str_dict[w_key] = []
             str_dict[w_key].append(word)
-        return list(str_dict.values())
+        return sorted(str_dict.values(), key=lambda x : len(x))
