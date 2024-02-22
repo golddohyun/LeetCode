@@ -1,34 +1,37 @@
-class Solution:
-    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+class Solution(object):
+    def findRedundantConnection(self, edges):
+        """
+        :type edges: List[List[int]]
+        :rtype: List[int]
+        """
+        n = len(edges)
+        paths= {key :[] for key in range(1, n+1)}
+        for u, v in edges :
+            paths[u].append(v)
+            paths[v].append(u)
 
-        def build_graph(edges):
-            n = len(edges)
-            graph = {}
-            for i in range(1,n+1):
-                graph[i] = []
+        ## implement cycle detection without indegree approach
+        def bfs_cycle_exists(paths, n) :
+            for V in range(1, n+1) :
+                visited = [0]*(n+1)
+                parent = [-1]*(n+1)
+                q = deque([V])
+                while q :
+                    cur = q.popleft()
+                    visited[cur]=1
+                    for nei in paths[cur] :
+                        if not visited[nei] :
+                            q.append(nei)
+                            parent[nei] = cur
+                        elif parent[cur] != nei :
+                            return True
+            return False
 
-            for u, v in edges:
-                graph[u].append(v)
-                graph[v].append(u)
-            
-            return graph
-        
-        graph = build_graph(edges)
-        degree = {key: len(graph[key]) for key in graph.keys()}
-        queue = [node for node in degree.keys() if degree[node] == 1 ]
 
-        while queue:
-            node = queue.pop(0)
-            neigh = graph[node][0]
-            graph.pop(node)
-            graph[neigh].remove(node)
-
-            degree.pop(node) # node degree is 0, remove it
-            degree[neigh] -= 1
-
-            if degree[neigh] == 1:
-                queue.append(neigh)
-        
-        for u, v in edges[::-1]:
-            if u in graph and v in graph:
-                return [u,v]        
+        for u, v in reversed(edges) :
+            paths[u].remove(v)
+            paths[v].remove(u)
+            if not bfs_cycle_exists(paths, n) :
+                return [u, v]
+            paths[u].append(v)
+            paths[v].append(u)
