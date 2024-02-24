@@ -1,39 +1,28 @@
+from collections import deque
+
 class Solution(object):
     def longestCycle(self, edges):
-        """
-        :type edges: List[int]
-        :rtype: int
-        """
-        # Using a set to store cycles for O(1) look-up
-        cycles = set()
-        visited = [-1] * len(edges) # -1 indicates unvisited
+        max_cycle_length = -1 
+        visited = [-1] * len(edges) 
 
         for V in range(len(edges)):
-            if edges[V] < 0: continue
+            if edges[V] < 0 or visited[V] != -1: continue
+            q = deque([(V, 0)])  
+            index_in_path = {}  
 
-            if visited[V] != -1: continue # Skip if already visited
-
-            q = [V]
-            index_in_path = {V: 0} # Store index in the path for each node
             while q:
-                cur = q.pop()
-                if edges[cur] < 0: continue
-
+                cur, dist = q.popleft()
+                if visited[cur] != -1: continue
+                visited[cur] = dist
+                index_in_path[cur] = dist 
                 nei = edges[cur]
-                if visited[nei] == -1: # If neighbor not visited
-                    visited[nei] = visited[cur] + 1
-                    q.append(nei)
-                    index_in_path[nei] = visited[nei]
-                elif nei in index_in_path: # Found a cycle
-                    # No need to sort, just get the cycle length directly
-                    cycle_length = visited[cur] - index_in_path[nei] + 1
-                    cycles.add(tuple(range(index_in_path[nei], visited[cur] + 1)))
-                    break
+                
+                if nei >= 0:
+                    if visited[nei] == -1:  # If neighbor not visited
+                        q.append((nei, dist + 1))
+                    elif nei in index_in_path:  # Cycle detected
+                        cycle_length = dist - index_in_path[nei] + 1
+                        max_cycle_length = max(max_cycle_length, cycle_length)
+                        break  
 
-            # Mark all nodes in the path as visited
-            for node in index_in_path.keys():
-                visited[node] = 0 # Reset to 0 to indicate node is no longer in the current path
-
-        if not cycles:
-            return -1
-        return max(len(i) for i in cycles)
+        return max_cycle_length
