@@ -1,5 +1,4 @@
 from collections import deque
-
 class Solution(object):
     def longestCycle(self, edges):
         max_cycle_length = -1 
