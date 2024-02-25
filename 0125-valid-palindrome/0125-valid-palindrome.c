@@ -1,33 +1,42 @@
-class Solution {
-public:
-    bool isPalindrome(string s) {
-        string newstr = "";
-        for (auto let : s){
-            if ((let >='a' && let <= 'z') || (let >='0' && let <= '9')) {
-                newstr+=let;
-            }
-            else if ((let >='A' && let <= 'Z')) {
-                newstr+=let+32;
-            }
-            else continue;
-        }
-        // for (auto i : newstr){
-        //     cout << i << ' ';
-        // }
-        // cout << endl;
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
-        // is palindrome check
-        int start=0;
-        int end= newstr.size() -1;
-
-        while (start < end){
-            if (newstr[start] != newstr[end]){
-                return false;
-            }
-            start++;
-            end--;
-        }
+bool isAlnum(char c) {
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
         return true;
     }
-};
+    return false;
+}
 
+// given s is array of chars
+bool isPalindrome(char* s) {
+    int memlen = strlen(s);
+    char* tmp = (char*)malloc(memlen+1);
+    int insert_idx=0;
+    for (int i=0; i < memlen; i++){
+        if (!isAlnum(s[i])) continue;
+        if (s[i] >= 'A' && s[i] <= 'Z') {
+            tmp[insert_idx++] = s[i] +32;
+        }
+        else {
+            tmp[insert_idx++] = s[i];
+        }
+    }
+    tmp[insert_idx] = '\0';
+    strcpy(s, tmp);
+    free(tmp);
+    
+    
+    int start=0;
+    int end = strlen(s)-1;
+    while (start < end) {
+        if (s[start] != s[end]){
+            return false;
+        }
+        start++;
+        end--;
+    }
+    return true;
+}
