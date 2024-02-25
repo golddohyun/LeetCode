@@ -1,21 +1,33 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        int n = s.size();
-        int i=0, j=n-1;
+        string newstr = "";
+        for (auto let : s){
+            if ((let >='a' && let <= 'z') || (let >='0' && let <= '9')) {
+                newstr+=let;
+            }
+            else if ((let >='A' && let <= 'Z')) {
+                newstr+=let+32;
+            }
+            else continue;
+        }
+        // for (auto i : newstr){
+        //     cout << i << ' ';
+        // }
+        // cout << endl;
 
-        while (i<j)
-            if (!isAlphaN(s[i])) i++;
-            else if (!isAlphaN(s[j])) j--;
-            else if (tolower(s[i++]) != tolower(s[j--])) return false;
+        // is palindrome check
+        int start=0;
+        int end= newstr.size() -1;
 
+        while (start < end){
+            if (newstr[start] != newstr[end]){
+                return false;
+            }
+            start++;
+            end--;
+        }
         return true;
     }
-
-    bool isAlphaN(char x) {
-        if (x >= '0' and x <= '9') return true;
-        if (x >= 'A' and x <= 'Z') return true;
-        if (x >= 'a' and x <= 'z') return true;
-        return false;
-    }
 };
+
