@@ -29,33 +29,24 @@ int countDigits(int x) {
 
 char* intToString(int x) {
     int numlen = countDigits(x);
-    bool isNegative = x < 0;
-    if (isNegative) {
-        x = -x; 
-        numlen++; 
-    }
-    
-    char* str = (char*)malloc(numlen + 1); 
-    if (!str) return NULL; 
-    str[numlen] = '\0'; 
+    char* tmp = (char*)malloc(numlen+1);
+    tmp[numlen] = '\0';
 
     if (x == 0) {
-        str[0] = '0';
-        return str;
+        tmp[0] = '0';
+        return tmp;
     }
 
-    int i = numlen - 1;
+    int insert_idx = 0;
     while (x > 0) {
-        str[i--] = (x % 10) + '0';
+        char digit = (x % 10) + '0';
+        tmp[numlen-insert_idx-1] = digit;
+        insert_idx++;
         x /= 10;
     }
-
-    if (isNegative) {
-        str[i] = '-';
-    }
-
-    return str;
+    return tmp;
 }
+
 bool isPalindrome(int x) {
     if (x < 0) return false;
     char* cur = intToString(x);
@@ -65,7 +56,3 @@ bool isPalindrome(int x) {
     free(currev); 
     return result;    
 }
-
-
-
-
