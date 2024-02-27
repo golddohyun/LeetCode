@@ -4,40 +4,33 @@ class Solution(object):
         :type edges: List[List[int]]
         :rtype: List[int]
         """
-        from collections import defaultdict, deque
-        adj_list = {key :[] for key in range(1, len(edges)+1)}
+        n = len(edges)
+        paths= {key :[] for key in range(1, n+1)}
         for u, v in edges :
-            adj_list[u].append(v)
-            adj_list[v].append(u)
+            paths[u].append(v)
+            paths[v].append(u)
 
-        
-        def bfs_cycle_exists(adj_list) :
-            for V in range(1, len(edges)+1) :
-                if not adj_list[V] : continue
-                visited = [0]*(len(edges)+1)
-                pred = dict()
-                Q = deque([V])
-                pred[V] = -1
-                
-                while Q :
-                    cur = Q.popleft()
-                    visited[cur] =1
-                    
-                    for nei in adj_list[cur] :
+        ## implement cycle detection without indegree approach
+        def bfs_cycle_exists(paths, n) :
+            for V in range(1, n+1) :
+                visited = [0]*(n+1)
+                parent = [-1]*(n+1)
+                q = deque([V])
+                while q :
+                    cur = q.popleft()
+                    visited[cur]=1
+                    for nei in paths[cur] :
                         if not visited[nei] :
-                            visited[nei] =1
-                            Q.append(nei)
-                            pred[nei] = cur
-                        elif pred[cur] != nei :
+                            q.append(nei)
+                            parent[nei] = cur
+                        elif parent[cur] != nei :
                             return True
             return False
-                            
-        
+
         for u, v in reversed(edges) :
-            adj_list[u].remove(v)
-            adj_list[v].remove(u)
-            if not bfs_cycle_exists(adj_list):
+            paths[u].remove(v)
+            paths[v].remove(u)
+            if not bfs_cycle_exists(paths, n) :
                 return [u, v]
-            adj_list[u].append(v)
-            adj_list[v].append(u)
-            
+            paths[u].append(v)
+            paths[v].append(u)
