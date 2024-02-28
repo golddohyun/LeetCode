@@ -1,7 +1,7 @@
 class Solution:
     def longestPalindrome(self,s) :
-        if len(s) <= 1:
-            return s
+        if len(s) <= 1 : return s
+        if len(set(s)) <= 1 : return s
         
         Max_Len=1
         Max_Str=s[0]
