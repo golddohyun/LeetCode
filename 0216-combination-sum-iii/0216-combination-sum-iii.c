@@ -1,27 +1,42 @@
-class Solution {
-public:
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#define RANGE 10
 
-    void backtrack_comb(vector<int>& arr, vector<vector<int>>& result, vector<int>& used, int start, int& maxlength, int target){
-        if (arr.size() == maxlength && target == 0){
-            result.push_back(arr);
-            return;
-        }
-        for (int i=start; i < 10; i++){
-            if (used[i]) continue;
-            used[i] = 1;
-            arr.push_back(i);
-            backtrack_comb(arr, result, used, i+1, maxlength, target-i);
-            arr.pop_back();
-            used[i] = 0;
-        }
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+void backtrack(int **res, int *tmp, int k, int n, int *row, int i, int sum, int j) {
+    if (sum == n && j == k) {
+        for (int i = 0; i < k; i++)
+            res[*row][i] = tmp[i];
+        (*row)++;
+        return;
+    } else if (j >= k || sum > n)
+        return;
+    while (sum + i <= n && i <= 9) {
+        tmp[j] = i;
+        backtrack(res, tmp, k, n, row, i+1, sum + i, j + 1);
+        i++;
     }
+}
 
-    vector<vector<int>> combinationSum3(int k, int n) {
-        vector<int> used(10, 0);
-        vector<int> arr;
-        vector<vector<int>> result;
-        backtrack_comb(arr, result, used, 1, k, n);
-
-        return result;
-    }
-};
+int** combinationSum3(int k, int n, int* returnSize, int** returnColumnSizes)
+{
+    int **res = malloc(sizeof(int*) * 1000);    
+    for (int i = 0; i < 1000; i++)
+        res[i] = malloc(sizeof(int) * k);
+		
+    int tmp[1000];
+    *returnSize = 0;
+    backtrack(res, tmp, k, n, returnSize, 1, 0, 0);
+    
+    if (*returnSize > 0)
+        *returnColumnSizes = malloc(sizeof(int) * *returnSize);
+    for (int i = 0; i < *returnSize; i++)
+        (*returnColumnSizes)[i] = k;
+        
+    return res;
+}
