@@ -15,11 +15,8 @@ class Solution(object):
         def DFS(curnode, target, arr) :
             if not curnode.left and not curnode.right :
                 if sum(arr) == target :
-                    print(arr)
                     return True 
                 return False
-
-            print("current visit : ", curnode.val, arr)
             if curnode.left :
                 if DFS(curnode.left, target, arr+[curnode.left.val]) : return True
             if curnode.right : 
