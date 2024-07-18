@@ -13,7 +13,4 @@ class Solution(object):
                     return False
                 else :
                     mystack.pop()
-        if mystack :
-            return False
-        else :
-            return True  
+        return not mystack
