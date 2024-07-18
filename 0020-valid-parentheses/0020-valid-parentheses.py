@@ -11,6 +11,5 @@ class Solution(object):
             else :
                 if not mystack or (i == ')' and mystack[-1] != '(') or (i == ']' and mystack[-1] != '[') or (i == '}' and mystack[-1] != '{') :
                     return False
-                else :
-                    mystack.pop()
+                mystack.pop()
         return not mystack
